@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Transformers\BankidTransformer;
 use Exception;
 use SoapClient;
 
@@ -45,6 +46,10 @@ class BankID
     /**
      * @var mixed
      */
+    protected $bankidTransformer;
+    /**
+     * @var mixed
+     */
     protected $ssl_context;
 
     public function __construct()
@@ -68,6 +73,8 @@ class BankID
 
         ];
 
+        $this->bankidTransformer = new BankidTransformer;
+
         $this->ssl_context = stream_context_create($this->context_options);
 
         if (!file_exists($this->ca_cert)) {
@@ -85,5 +92,27 @@ class BankID
         $this->soapClient = new SoapClient($this->wsdl, [
             'stream_context' => $this->ssl_context,
         ]);
+    }
+
+    public function authenticate()
+    {
+        try {
+
+            $args['personalNumber'] = cleanSSN(session('ssn'));
+
+            $authResponse = $this->soapClient->Authenticate($args);
+
+            if (!isset($authResponse->orderRef) || !isset($authResponse->autoStartToken)) {
+
+                throw new Exception('Bad response from BANKID');
+            }
+
+            $response = $this->bankidTransformer->transformAuthentication($authResponse);
+
+            dd($response);
+
+        } catch (Exception $e) {
+
+        }
     }
 }

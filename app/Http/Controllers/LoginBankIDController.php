@@ -25,6 +25,7 @@ class LoginBankIDController extends Controller
 
         session()->put('ssn', cleanSSN($request->ssn));
 
+        $authResponse = $bankId->authenticate();
     }
 
 }
