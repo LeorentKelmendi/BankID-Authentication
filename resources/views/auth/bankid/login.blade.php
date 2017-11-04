@@ -10,7 +10,7 @@
 
                     <div class="col-md-4 col-md-offset-4 login-bankid-container">
                         <div class="bankid-log-container"><img src="/bankid.png" width="300px;" height="300px;"></div>
-                        {{ Form::open(['url' => '/test', 'method' => 'POST', 'class' =>'form-vertical']) }}
+                        {{ Form::open(['url' => route('try-login-bankd'), 'method' => 'POST', 'class' =>'form-vertical']) }}
 
                         @if (isset($errors) && $errors->any())
 
