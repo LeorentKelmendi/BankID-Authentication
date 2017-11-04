@@ -51,14 +51,14 @@ class Ssn extends Validator
 
         if ($length !== self::LENGTH) {
 
-            $this->errors()->add(self::LENGTH, $this->messageTemplates[self::INCORRECT_LENGTH]);
+            $this->errors()->add(self::LENGTH, self::messageTemplates[self::LENGTH]);
         }
 
         if (!preg_match($this->pattern, $value, $matches)) {
 
-            $this->errors()->add(self::NO_MATCH, $this->messageTemplates[self::NO_MATCH]);
-            return false;
+            $this->errors()->add(self::NO_MATCH, self::messageTemplates[self::NO_MATCH]);
 
+            return false;
         }
 
         foreach ($matches as $match) {
@@ -68,12 +68,9 @@ class Ssn extends Validator
                 $this->errors()->add(self::NO_MATCH, $this->messageTemplates[self::NO_MATCH]);
 
                 return false;
-
             }
-
         }
 
         return true;
-
     }
 }
