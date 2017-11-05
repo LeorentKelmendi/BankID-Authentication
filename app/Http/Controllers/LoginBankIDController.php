@@ -55,9 +55,9 @@ class LoginBankIDController extends Controller
     public function checkLogin(BankID $bankId, Request $request)
     {
 
-        // if (!$request->wantsJson()) {
-        //     throw new Exception('Incorrect request!');
-        // }
+        if (!$request->wantsJson()) {
+            throw new Exception('Incorrect request!');
+        }
 
         if (!session()->has('orderRef')) {
 
