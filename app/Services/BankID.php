@@ -4,12 +4,13 @@ namespace App\Services;
 use App\Transformers\BankidTransformer;
 use Exception;
 use SoapClient;
+use SoapFault;
 
 class BankID
 {
 
-    const INVALID_PARAMETERS      = "INVALID_PARAMETERS ";
-    const ALREADY_IN_PROGRESS     = "ALREADY_IN_PROGRESS ";
+    const INVALID_PARAMETERS      = "INVALID_PARAMETERS";
+    const ALREADY_IN_PROGRESS     = "ALREADY_IN_PROGRESS";
     const INTERNAL_ERROR          = "INTERNAL_ERROR";
     const OUTSTANDING_TRANSACTION = "OUTSTANDING_TRANSACTION";
     const NO_CLIENT               = "NO_CLIENT";
@@ -17,6 +18,8 @@ class BankID
     const USER_SIGN               = "USER_SIGN";
     const COMPLETE                = "COMPLETE";
     const USER_CANCEL             = "USER_CANCEL";
+    const CANCEL                  = "CANCELLED";
+    const EXPIRED_TRANSACTION     = "EXPIRED_TRANSACTION";
 
     /**
      * @var mixed
@@ -94,6 +97,9 @@ class BankID
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     public function authenticate()
     {
         try {
@@ -109,10 +115,84 @@ class BankID
 
             $response = $this->bankidTransformer->transformAuthentication($authResponse);
 
-            dd($response);
+            return $response;
+
+        } catch (Exception $e) {
+            if ($e instanceof SoapFault) {
+
+                return $e->getMessage();
+
+            }
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function collectStatus()
+    {
+        $args = session('orderRef');
+
+        try {
+
+            $result = $this->soapClient->Collect($args);
+
+            if (!isset($result->progressStatus)) {
+
+                throw new Exception('Bad response from BankID');
+            }
+
+            $status = $this->bankidTransformer->transformCollect($result);
+
+            return $status['status'];
 
         } catch (Exception $e) {
 
+            return $e->getMessage();
         }
+    }
+
+    /**
+     * @param $status
+     */
+    public function getMessage($status)
+    {
+
+        switch ($status) {
+            case self::OUTSTANDING_TRANSACTION:
+                $message = "Continue and open BankID app";
+                break;
+
+            case self::NO_CLIENT:
+                $message = "Start BankID app";
+                break;
+            case self::STARTED:
+                $message = "Searching for BankID, this may take a while";
+                break;
+            case self::USER_SIGN:
+                $message = "Please enter your password on BankID";
+                break;
+
+            case self::USER_CANCEL:
+                $message = "You have canceled the signin";
+                break;
+
+            case self::INVALID_PARAMETERS:
+                $message = "Invalid parameters";
+                break;
+
+            case self::EXPIRED_TRANSACTION:
+                $message = "Please try again, the first attemt expired!";
+                break;
+
+            case self::CANCEL:
+                $message = "You are trying to send another order!";
+                break;
+            default:
+                $message = "An error occured: " . $status;
+                break;
+        }
+
+        return $message;
     }
 }

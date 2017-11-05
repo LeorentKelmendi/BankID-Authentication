@@ -17,4 +17,16 @@ class BankidTransformer
             'autoStartToken' => $request->autoStartToken,
         ];
     }
+
+    /**
+     * @param $request
+     */
+    public function transformCollect($request)
+    {
+
+        return [
+
+            'status' => $request->progressStatus,
+        ];
+    }
 }

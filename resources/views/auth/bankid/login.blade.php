@@ -9,7 +9,7 @@
                 <div class="row">
 
                     <div class="col-md-4 col-md-offset-4 login-bankid-container">
-                        <div class="bankid-log-container"><img src="/bankid.png" width="300px;" height="300px;"></div>
+                        <div class="bankid-log-container"><img src="{{asset('images/bankid.png')}}" width="300px;" height="300px;"></div>
                         {{ Form::open(['url' => route('try-login-bankd'), 'method' => 'POST', 'class' =>'form-vertical']) }}
 
                         @if (isset($errors) && $errors->any())
