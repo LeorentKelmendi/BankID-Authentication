@@ -2,7 +2,7 @@
 Leo Kelmendi @ Provideit.se 
 
 # What is BankID System 
-
+![alt text](https://www.aea.se/media/images/news/bankid.png)
 The BankID system is a leading electronic identification solution in Nordic/Scandinavian countries for two factor authentication. 
 The mechanism allows companies, banks and government agencies to authenticate and conclude agreements with individuals over the internet. It has been developed and implemented by a large number of banks. The system contains and protects a user’s sensitive information such as contact details, email address, phone number, bank account number. The BankID system is a two-step verification mechanism. The user can install the BankID app on either his mobile phone or personal computer. This application will provide the user with a “personal number” for any website/client that implements BankID system in order to verify his identity. It will give information about the user’s first name, last name, complete name and the personal number.
 
