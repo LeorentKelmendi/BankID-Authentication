@@ -23,15 +23,14 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="ssn" class="sr-only control-label">Personnummer</label>
-                                {{ Form::text('ssn', old('ssn'), ['class' => 'form-control', 'placeholder' => 'ÅÅMMDD-NNNN', 'autocomplete' => 'off', 'required', 'autofocus']) }}
+                                {{ Form::text('ssn', old('ssn'), ['class' => 'form-control', 'placeholder' => 'YYMMDD-NNNN', 'autocomplete' => 'off', 'required', 'autofocus']) }}
 
                             </div>
                         </div>
 
-                        <input type="hidden" value="trancezonale" name="password">
 
 
-                        <button type="submit" class="btn btn-default btn-login-bankid text-center">Logga in</button>
+                        <button type="submit" class="btn btn-default btn-login-bankid text-center">Log in</button>
 
 
                         {{ Form::close() }}
